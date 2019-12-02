@@ -38,7 +38,7 @@ class Voto(Base):
     __tablename__ = 'votos'
 
     id = Column(Integer, primary_key=True)
-    usuario_id = Column(Integer, ForeignKey('usuarios.id'))
-    candidato_id= Column(Integer, ForeignKey('candidatos.id'))
-    eleicao_id = Column(Integer, ForeignKey('eleicoes.id'))
+    usuario_id = Column(Integer, ForeignKey('usuarios.id'), nullable=False)
+    candidato_id= Column(Integer, ForeignKey('candidatos.id'), nullable=False)
+    eleicao_id = Column(Integer, ForeignKey('eleicoes.id'), nullable=False)
     
