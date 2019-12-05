@@ -1,6 +1,6 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime
-from db import engine, Session
+from app.db import engine, Session
 from app import app
 from flask_bcrypt import Bcrypt
 
@@ -8,7 +8,7 @@ Base = declarative_base()
 session = Session()
 bcrypt = Bcrypt(app)
 
-class Usuario(Base):
+class UsuarioAbstrato(Base):
     __tablename__ = 'usuario'
     
     id = Column(Integer, primary_key=True)

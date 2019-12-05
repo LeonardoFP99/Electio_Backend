@@ -185,4 +185,8 @@ pip-selfcheck.json
 # Ignore all local history of files
 .history
 
+#.db sqlite
+
+*.db
+
 # End of https://www.gitignore.io/api/venv,flask,python,visualstudiocode

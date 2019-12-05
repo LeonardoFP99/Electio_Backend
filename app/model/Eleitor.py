@@ -1,16 +1,17 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, DateTime
-from db import engine, Session
-from token import gerarToken()
+from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from app.db import engine, Session
+from app.geradorToken import gerarToken
 from app import app
 from flask_bcrypt import Bcrypt
-from Usuario import Usuario
+from .Usuario import UsuarioAbstrato
 
 Base = declarative_base()
 session = Session()
 bcrypt = Bcrypt(app)
 
-class Eleitor(Usuario):
+class Eleitor(UsuarioAbstrato):
     __tablename__ = 'eleitor'
     
     id = Column(Integer, ForeignKey('usuario.id'), primary_key=True)
@@ -31,7 +32,8 @@ class Eleitor(Usuario):
                 novo_usuario = Eleitor(
                     email=novo_email, 
                     senha=bcrypt.generate_password_hash(nova_senha).decode('utf-8'), 
-                    token=gerarToken())
+                    token=bcrypt.generate_password_hash(gerarToken()).decode('utf-8')
+                )
 
                 try:
 
