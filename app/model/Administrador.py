@@ -5,13 +5,13 @@ from app.db import engine, Session
 from app.geradorToken import gerarToken
 from app import app
 from flask_bcrypt import Bcrypt
-from Usuario import Usuario
+from .Usuario import UsuarioAbstrato
 
 Base = declarative_base()
 session = Session()
 bcrypt = Bcrypt(app)
 
-class Administrador(Usuario):
+class Administrador(UsuarioAbstrato):
     __tablename__ = 'administrador'
     
     id = Column(Integer, ForeignKey('usuario.id'), primary_key=True)
