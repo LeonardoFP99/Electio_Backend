@@ -71,7 +71,7 @@ class Administrador(UsuarioAbstrato):
 
             else:
 
-                raise Exception(f'Não existe uma conta de eleitor associada com o email {log_email}.')
+                raise Exception(f'Não existe uma conta de administrador associada com o email {log_email}.')
 
         except:
 
