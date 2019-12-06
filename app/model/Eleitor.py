@@ -1,15 +1,13 @@
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from app.db import engine, Session
 from app.geradorToken import gerarToken
 from app import app
-from flask_bcrypt import Bcrypt
+from app import bcrypt
 from .Usuario import UsuarioAbstrato
+from . import Voto
 
-Base = declarative_base()
 session = Session()
-bcrypt = Bcrypt(app)
 
 class Eleitor(UsuarioAbstrato):
     __tablename__ = 'eleitor'
@@ -39,6 +37,8 @@ class Eleitor(UsuarioAbstrato):
 
                     session.add(novo_usuario)
                     session.commit()
+                    
+                    return novo_usuario
 
                 except:
                     
@@ -79,4 +79,3 @@ class Eleitor(UsuarioAbstrato):
             raise Exception("Erro ao realizar login.")
 
 
-Base.metadata.create_all(engine)

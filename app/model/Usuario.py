@@ -1,12 +1,11 @@
-from sqlalchemy.ext.declarative import declarative_base
+from .Base_Declarativa import Base
 from sqlalchemy import Column, Integer, String, DateTime
 from app.db import engine, Session
 from app import app
+from app import bcrypt
 from flask_bcrypt import Bcrypt
 
-Base = declarative_base()
 session = Session()
-bcrypt = Bcrypt(app)
 
 class UsuarioAbstrato(Base):
     __tablename__ = 'usuario'
@@ -29,4 +28,3 @@ class UsuarioAbstrato(Base):
         pass
 
 
-Base.metadata.create_all(engine)

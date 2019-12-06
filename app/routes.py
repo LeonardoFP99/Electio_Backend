@@ -1,6 +1,6 @@
 from app import app
 from app.control import EleitorController
-from flask import request, json
+from flask import request, json, jsonify
 
 @app.route('/')
 @app.route('/index')
@@ -23,6 +23,8 @@ def registroEleitor():
     email = request.get_json()['email']
     senha = request.get_json()['senha']
 
-    return EleitorController.registrarEleitor(email, senha)
+    result = jsonify(EleitorController.registrarEleitor(email, senha))
+    return result
+
 
 

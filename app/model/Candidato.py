@@ -1,12 +1,12 @@
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, DateTime
-from db import engine, Session
+from .Base_Declarativa import Base
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
+from app.db import engine, Session
 from app import app
-from flask_bcrypt import Bcrypt
+from . import Eleicao
+from . import Voto
 
-Base = declarative_base()
 session = Session()
-bcrypt = Bcrypt(app)
 
 class Candidato(Base):
     __tablename__ = 'candidato'
@@ -18,4 +18,3 @@ class Candidato(Base):
     votos = relationship("Voto")
 
 
-Base.metadata.create_all(engine)
