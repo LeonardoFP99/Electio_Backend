@@ -1,12 +1,8 @@
 from .Base_Declarativa import Base
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
-from app.db import engine, Session
-from app import app
+from sqlalchemy import Column, Integer, String, ForeignKey
 from . import Eleitor
 from . import Candidato
 from . import Eleicao
-
-session = Session()
 
 class Voto(Base):
     __tablename__ = 'voto'

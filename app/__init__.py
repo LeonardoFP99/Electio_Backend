@@ -5,7 +5,7 @@ from app.db import engine
 
 app = Flask(__name__)
 
-app.config['JWT_SECRET_KEY'] = 'elibnom'
+app.config['SECRET_KEY'] = 'elibnom'
 bcrypt = Bcrypt(app)
 
 from app import routes

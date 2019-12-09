@@ -1,12 +1,5 @@
-from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
-from app.db import engine, Session
-from app.geradorToken import gerarToken
-from app import app
-from app import bcrypt
+from sqlalchemy import Column, Integer, ForeignKey
 from .Usuario import UsuarioAbstrato
-
-session = Session()
 
 class Administrador(UsuarioAbstrato):
     __tablename__ = 'administrador'
@@ -16,63 +9,3 @@ class Administrador(UsuarioAbstrato):
     __mapper_args__ = {
         'polymorphic_identity':'administrador',
     }
-
-    def registrar(self, novo_email, nova_senha):
-
-        try:
-
-            query = session.query(Administrador).filter(Administrador.email == novo_email)
-
-            if not query.first():
-
-                novo_usuario = Administrador(
-                    email=novo_email, 
-                    senha=bcrypt.generate_password_hash(nova_senha).decode('utf-8'), 
-                    token=bcrypt.generate_password_hash(gerarToken()).decode('utf-8')
-                )
-
-                try:
-
-                    session.add(novo_usuario)
-                    session.commit()
-
-                except:
-                    
-                    session.rollback()
-                    raise Exception("Erro ao registrar usuário.")
-
-            else:
-
-                raise Exception(f'O email {novo_email} já está sendo usado.')
-
-        except:
-
-            raise Exception("Erro ao registrar usuário.")
-
-    
-    def login(self, log_email, log_senha):
-
-        try:
-
-            query = session.query(Administrador).filter(Administrador.email == log_email)
-
-            if query.first():
-
-                if bcrypt.check_password_hash(query.senha, log_senha):
-
-                    return True
-
-                else:
-
-                    raise Exception("Credenciais incorretas.")
-
-            else:
-
-                raise Exception(f'Não existe uma conta de administrador associada com o email {log_email}.')
-
-        except:
-
-            raise Exception("Erro ao realizar login.")
-
-
-
