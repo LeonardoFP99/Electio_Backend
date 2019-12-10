@@ -4,8 +4,8 @@ from app.control import (
     EleicaoController, 
     AdministradorController, 
     CandidatoController, 
-    VotoController, 
-    Autorizacao)
+    VotoController)
+from app.control.Autorizacao import admin_req, eleitor_req, anon_req
 from flask import request, json, jsonify, make_response
 
 
@@ -14,6 +14,7 @@ from flask import request, json, jsonify, make_response
 # Endpoints do Eleitor
 
 @app.route('/Eleitor/login', methods=['POST'])
+@anon_req
 def loginEleitor():
 
     try:
@@ -36,6 +37,7 @@ def loginEleitor():
 
 
 @app.route('/Eleitor/registro', methods=['POST'])
+@anon_req
 def registroEleitor():
 
     try:
@@ -58,7 +60,8 @@ def registroEleitor():
 
 
 @app.route('/Eleitor/eleicoes', methods=['GET'])
-def consultaEleicoesVotar():
+@eleitor_req
+def consultaEleicoesVotar(user):
 
     return EleicaoController.retornarAtivas()
 
@@ -66,7 +69,8 @@ def consultaEleicoesVotar():
 
 
 @app.route('/Eleitor/eleicoes/candidatos', methods=['POST'])
-def consultaEleitorEleicoesCandidatos():
+@eleitor_req
+def consultaEleitorEleicoesCandidatos(user):
 
     try:
 
@@ -82,7 +86,8 @@ def consultaEleitorEleicoesCandidatos():
 
 
 @app.route('Eleitor/votos', methods=['POST'])
-def consultaEleitorVotos():
+@eleitor_req
+def consultaEleitorVotos(user):
 
     try:
 
@@ -98,7 +103,8 @@ def consultaEleitorVotos():
 
 
 @app.route('/Eleitor/votar', methods=['POST'])
-def votar():
+@eleitor_req
+def votar(user):
 
     try:
 
@@ -134,6 +140,7 @@ def apuracao():
 # Endpoints do Administrador
 
 @app.route('/Admin/login', methods=['POST'])
+@anon_req
 def loginAdmin():
 
     try:
@@ -156,6 +163,7 @@ def loginAdmin():
 
 
 @app.route('/Admin/registro', methods=['POST'])
+@anon_req
 def registroAdmin():
 
     try:
@@ -178,7 +186,8 @@ def registroAdmin():
 
 
 @app.route('/Admin/eleicoes/registro', methods=['POST'])
-def registrarEleicao():
+@admin_req
+def registrarEleicao(user):
 
     try:
 
@@ -194,7 +203,8 @@ def registrarEleicao():
 
 
 @app.route('/Admin/eleicoes/alterar', methods=['PUT'])
-def alterarDescricaoEleicao():
+@admin_req
+def alterarDescricaoEleicao(user):
 
     try:
 
@@ -216,7 +226,8 @@ def alterarDescricaoEleicao():
 
 
 @app.route('/Admin/eleicoes/agendar', methods=['PUT'])
-def agendarEleicao():
+@admin_req
+def agendarEleicao(user):
 
     try:
 
@@ -240,7 +251,8 @@ def agendarEleicao():
 
 
 @app.route('/Admin/eleicoes/naoAgendadas', methods=['GET'])
-def consultaEleicoesNaoAgendadas():
+@admin_req
+def consultaEleicoesNaoAgendadas(user):
 
     return EleicaoController.retornarNaoAgendadas()
 
@@ -248,7 +260,8 @@ def consultaEleicoesNaoAgendadas():
 
 
 @app.route('/Admin/eleicoes/agendadas', methods=['GET'])
-def consultaEleicoesAgendadas():
+@admin_req
+def consultaEleicoesAgendadas(user):
 
     return EleicaoController.retornarAgendadas
 
@@ -256,7 +269,8 @@ def consultaEleicoesAgendadas():
 
 
 @app.route('/Admin/eleicoes/iniciadas', methods=['GET'])
-def consultaEleicoesIniciadas():
+@admin_req
+def consultaEleicoesIniciadas(user):
 
     return EleicaoController.retornarIniciadas()
 
@@ -264,7 +278,8 @@ def consultaEleicoesIniciadas():
 
 
 @app.route('/Admin/eleicoes/ativas', methods=['GET'])
-def consultaEleicoesAtivas():
+@admin_req
+def consultaEleicoesAtivas(user):
 
     return EleicaoController.retornarAtivas
 
@@ -272,7 +287,8 @@ def consultaEleicoesAtivas():
 
 
 @app.route('/Admin/eleicoes/candidatos', methods=['POST'])
-def consultaAdminEleicoesCandidatos():
+@admin_req
+def consultaAdminEleicoesCandidatos(user):
 
     try:
 
@@ -288,7 +304,8 @@ def consultaAdminEleicoesCandidatos():
 
 
 @app.route('/Admin/candidatos/adicionar', methods=['POST'])
-def adicionarCandidato():
+@admin_req
+def adicionarCandidato(user):
 
     try:
 
@@ -319,7 +336,8 @@ def adicionarCandidato():
 
 
 @app.route('/Admin/candidatos/remover', methods=['DELETE'])
-def removerCandidato():
+@admin_req
+def removerCandidato(user):
 
     try:
 
