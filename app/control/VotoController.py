@@ -30,6 +30,10 @@ def registro(data):
     if not eleicao:
         return jsonify({'msg' : 'Eleição não encontrada.'}), 404
 
+    if eleicao.agendada == False or eleicao.inicio > datetime.datetime.utcnow() or eleicao.fim < datetime.datetime.utcnow():
+        return jsonify({'msg' : 'Esta eleição não pode receber votos.'}), 403
+
+
     novo_voto = Voto(eleitor_id = data['eleitor'], candidato_id = data['candidato'], eleicao_id = data['eleicao'])
 
     try:

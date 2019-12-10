@@ -12,7 +12,7 @@ session = Session()
 
 
 
-def registro(desc): 
+def registro(desc): #Registra eleição, sem datas de início e fim
 
     nova_eleicao = Eleicao(descricao = desc, agendada = False)
 
@@ -30,7 +30,7 @@ def registro(desc):
 
 
 
-def agendar(data):
+def agendar(data): #Registrar data de início e fim da eleição
 
     eleicao = session.query(Eleicao).filter(Eleicao.id == data['id']).first()
 
@@ -71,8 +71,7 @@ def agendar(data):
 
 
 
-
-def alterarDescricao(data):
+def alterarDescricao(data): #Altera descrição de uma eleição não agendada
 
     eleicao = session.query(Eleicao).filter(Eleicao.id == data['id']).first()
 
@@ -94,9 +93,27 @@ def alterarDescricao(data):
 
 
 
-def retornarAgendadas():
+def retornarNaoAgendadas(): #Retorna eleicões não agendadas, sem data de início e fim
 
-    eleicoes = session.query(Eleicao.id, Eleicao.descricao, Eleicao.inicio, Eleicao.fim).filter(Eleicao.agendada == True, Eleicao.inicio > datetime.datetime.utcnow()).all()
+    eleicoes = session.query(Eleicao.id, Eleicao.descricao).filter(Eleicao.agendada == False).all()
+
+    if not eleicoes:
+        return jsonify({'msg' : 'Não foram encontradas eleições com estes parâmetros.'}), 404
+
+    eleicoes_schema = EleicaoSchema(many = True)
+    output = eleicoes_schema.dump(eleicoes).data
+
+    return jsonify({'eleicoes' : output})
+
+
+
+
+def retornarAgendadas(): #Retorna eleições agendadas, mas não iniciadas
+
+    eleicoes = session.query(Eleicao.id, Eleicao.descricao, Eleicao.inicio, Eleicao.fim).filter(
+        Eleicao.agendada == True, 
+        Eleicao.inicio > datetime.datetime.utcnow()
+        ).all()
     
     if not eleicoes:
         return jsonify({'msg' : 'Não foram encontradas eleições com estes parâmetros.'}), 404
@@ -109,9 +126,12 @@ def retornarAgendadas():
 
 
 
-def retornarIniciadas():
+def retornarIniciadas(): #Retorna eleições iniciadas, finalizadas ou não
 
-    eleicoes = session.query(Eleicao.id, Eleicao.descricao, Eleicao.inicio, Eleicao.fim).filter(Eleicao.agendada == True, Eleicao.inicio <= datetime.datetime.utcnow()).all()
+    eleicoes = session.query(Eleicao.id, Eleicao.descricao, Eleicao.inicio, Eleicao.fim).filter(
+        Eleicao.agendada == True, 
+        Eleicao.inicio <= datetime.datetime.utcnow()
+        ).all()
     
     if not eleicoes:
         return jsonify({'msg' : 'Não foram encontradas eleições com estes parâmetros.'}), 404
@@ -124,9 +144,28 @@ def retornarIniciadas():
 
 
 
-def retornarFinalizadas():
+def retornarAtivas(): #Retorna eleições iniciadas, mas não finalizadas
+    
+    eleicoes = session.query(Eleicao.id, Eleicao.descricao, Eleicao.inicio, Eleicao.fim).filter(
+        Eleicao.agendada == True, 
+        Eleicao.inicio <= datetime.datetime.utcnow(), 
+        Eleicao.fim >= datetime.datetime.utcnow()
+        ).all()
 
-    eleicoes = session.query(Eleicao.id, Eleicao.descricao, Eleicao.inicio, Eleicao.fim).filter(Eleicao.fim < datetime.datetime.utcnow()).all()
+    if not eleicoes:
+        return jsonify({'msg' : 'Não foram encontradas eleições com estes parâmetros.'}), 404
+
+    eleicoes_schema = EleicaoSchema(many = True)
+    output = eleicoes_schema.dump(eleicoes).data
+
+    return jsonify({'eleicoes' : output})
+    
+
+
+
+def retornarFinalizadas(): #Retorna eleições finalizadas
+
+    eleicoes = session.query(Eleicao).filter(Eleicao.fim < datetime.datetime.utcnow()).all()
     
     if not eleicoes:
         return jsonify({'msg' : 'Não foram encontradas eleições com estes parâmetros.'}), 404
@@ -135,8 +174,3 @@ def retornarFinalizadas():
     output = eleicoes_schema.dump(eleicoes).data
 
     return jsonify({'eleicoes' : output})
-
-
-
-
-
