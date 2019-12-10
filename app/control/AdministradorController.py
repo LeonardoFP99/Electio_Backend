@@ -1,4 +1,4 @@
-from app.model.Administrador import Administrador
+from app.model.Models import Administrador
 from flask import jsonify, json, make_response
 from flask_cors import CORS
 from app import app, bcrypt

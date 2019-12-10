@@ -1,7 +1,4 @@
-from app.model.Voto import Voto, VotoSchema
-from app.model.Eleitor import Eleitor
-from app.model.Candidato import Candidato
-from app.model.Eleicao import Eleicao
+from app.model.Models import Voto, VotoSchema, Eleitor, Candidato, Eleicao
 from flask import jsonify, json, make_response
 from flask_cors import CORS
 from app import app

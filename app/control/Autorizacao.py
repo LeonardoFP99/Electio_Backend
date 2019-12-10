@@ -1,5 +1,4 @@
-from app.model.Eleitor import Eleitor
-from app.model.Administrador import Administrador
+from app.model.Models import Eleitor, Administrador
 from flask import jsonify, json, make_response, request
 from flask_cors import CORS
 from app import app

@@ -1,4 +1,4 @@
-from app.model.Eleitor import Eleitor
+from app.model.Models import Eleitor
 from flask import jsonify, json, make_response
 from flask_cors import CORS
 from app import app, bcrypt

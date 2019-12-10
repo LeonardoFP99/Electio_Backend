@@ -85,7 +85,7 @@ def consultaEleitorEleicoesCandidatos(user):
 
 
 
-@app.route('Eleitor/votos', methods=['POST'])
+@app.route('/Eleitor/votos', methods=['POST'])
 @eleitor_req
 def consultaEleitorVotos(user):
 
