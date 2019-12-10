@@ -1,5 +1,6 @@
 from .Base_Declarativa import Base
 from sqlalchemy import Column, Integer, String, ForeignKey
+from app import ma
 from . import Eleitor
 from . import Candidato
 from . import Eleicao
@@ -12,4 +13,8 @@ class Voto(Base):
     candidato_id = Column(Integer, ForeignKey('candidato.id'), nullable=False)
     eleicao_id = Column(Integer, ForeignKey('eleicao.id'), nullable=False)
 
+
+class VotoSchema(ma.ModelSchema):
+    class Meta:
+        model = Voto
 

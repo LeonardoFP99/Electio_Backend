@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, ForeignKey
+from app import ma
 from .Usuario import UsuarioAbstrato
 
 class Administrador(UsuarioAbstrato):
@@ -9,3 +10,8 @@ class Administrador(UsuarioAbstrato):
     __mapper_args__ = {
         'polymorphic_identity':'administrador',
     }
+
+
+class AdministradorSchema(ma.ModelSchema):
+    class Meta:
+        model = Administrador

@@ -21,7 +21,7 @@ def login(auth):
 
     if bcrypt.check_password_hash(eleitor.senha, auth['senha']):
 
-        token = jwt.encode({'email' : eleitor.email, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
+        token = jwt.encode({'email' : eleitor.email, 'type' : 'eleitor', 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
         return jsonify({'token' : token.decode('UTF-8')}), 200
 
     else:

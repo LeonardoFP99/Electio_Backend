@@ -21,7 +21,7 @@ def loginEleitor():
         "senha": log_senha
     }
 
-    return EleitorController.login(auth)
+    return EleitorController.login(auth) 
 
 
 
