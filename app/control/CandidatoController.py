@@ -62,3 +62,23 @@ def remover(data):
 
         session.rollback()
         return jsonify({'msg' : 'Erro ao remover candidato.'}), 500
+
+
+    
+
+def retornarPorEleicao(id):
+
+    eleicao = session.query(Eleicao).filter(Eleicao.id == id).first()
+
+    if not eleicao:
+        return jsonify({'msg' : 'Eleição não encontrada.'}), 404
+
+    candidatos = session.query(Candidato.id, Candidato.nome, Candidato.partido).filter(Candidato.eleicao_id == id).all()
+    
+    if not candidatos:
+        return jsonify({'msg' : 'Não foram encontrados candidatos nesta eleição.'}), 404
+
+    candidatos_schema = CandidatoSchema(many = True)
+    output = candidatos_schema.dump(candidatos).data
+
+    return jsonify({'candidatos' : output}), 200
