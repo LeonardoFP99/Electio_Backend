@@ -202,29 +202,6 @@ def registrarEleicao(user):
 
 
 
-@app.route('/Admin/eleicoes/alterar', methods=['PUT'])
-@admin_req
-def alterarDescricaoEleicao(user):
-
-    try:
-
-        eleicao_id = request.get_json()['id']
-        descricao = request.get_json()['descricao']
-
-    except KeyError:
-
-        return jsonify({'msg': 'Dados insuficientes ou mal-formatados'}), 400
-
-    data = {
-        "id" : eleicao_id,
-        "descricao" : descricao
-    }
-
-    return EleicaoController.alterarDescricao(data)
-
-
-
-
 @app.route('/Admin/eleicoes/agendar', methods=['PUT'])
 @admin_req
 def agendarEleicao(user):

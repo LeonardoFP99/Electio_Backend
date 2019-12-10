@@ -70,28 +70,6 @@ def agendar(data): #Registrar data de início e fim da eleição
 
 
 
-def alterarDescricao(data): #Altera descrição de uma eleição não agendada
-
-    eleicao = session.query(Eleicao).filter(Eleicao.id == data['id']).first()
-
-    if not eleicao:
-        return jsonify({'msg' : 'Eleição não encontrada.'}), 404
-
-    try:
-    
-        eleicao.descricao = data['descricao']
-        session.commit()
-
-        return jsonify({'msg' : 'Descrição da eleição alterada com sucesso.'})
-
-    except:
-
-        session.rollback()
-        return jsonify({'msg' : 'Erro ao alterar descrição da eleição.'}), 500
-
-
-
-
 def retornarNaoAgendadas(): #Retorna eleicões não agendadas, sem data de início e fim
 
     eleicoes = session.query(Eleicao.id, Eleicao.descricao).filter(Eleicao.agendada == False).all()
