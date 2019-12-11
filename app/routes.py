@@ -7,6 +7,7 @@ from app.control import (
     VotoController)
 from app.control.Autorizacao import admin_req, eleitor_req, anon_req
 from flask import request, json, jsonify, make_response
+import datetime
 
 
 
@@ -85,23 +86,6 @@ def consultaEleitorEleicoesCandidatos(user):
 
 
 
-@app.route('/Eleitor/votos', methods=['POST'])
-@eleitor_req
-def consultaEleitorVotos(user):
-
-    try:
-
-        eleitor_id = request.get_json()['eleitor']
-
-    except KeyError:
-
-        return jsonify({'msg': 'Dados insuficientes ou mal-formatados'}), 400
-
-    return VotoController.retornarPorEleitor(eleitor_id)
-
-
-
-
 @app.route('/Eleitor/votar', methods=['POST'])
 @eleitor_req
 def votar(user):
@@ -133,6 +117,38 @@ def votar(user):
 def apuracao():
 
     return EleicaoController.retornarFinalizadas()
+
+
+
+
+@app.route('/Apuracao/candidato', methods=['POST'])
+def apuracaoCandidato():
+
+    try:
+
+        candidato_id = request.get_json()['candidato']
+
+    except KeyError:
+
+        return jsonify({'msg': 'Dados insuficientes ou mal-formatados'}), 400
+
+    return VotoController.retornarPorCandidato(candidato_id)
+
+
+
+
+@app.route('/Apuracao/eleicao', methods=['POST'])
+def apuracaoEleicao():
+
+    try:
+
+        eleicao_id = request.get_json()['eleicao']
+
+    except KeyError:
+
+        return jsonify({'msg': 'Dados insuficientes ou mal-formatados'}), 400
+
+    return VotoController.retornarPorEleicao(eleicao_id)
 
 
 
@@ -240,7 +256,7 @@ def consultaEleicoesNaoAgendadas(user):
 @admin_req
 def consultaEleicoesAgendadas(user):
 
-    return EleicaoController.retornarAgendadas
+    return EleicaoController.retornarAgendadas()
 
 
 
@@ -258,7 +274,7 @@ def consultaEleicoesIniciadas(user):
 @admin_req
 def consultaEleicoesAtivas(user):
 
-    return EleicaoController.retornarAtivas
+    return EleicaoController.retornarAtivas()
 
 
 
@@ -301,6 +317,9 @@ def adicionarCandidato(user):
 
         partido = None
 
+    if partido == "" or not partido.strip():
+        partido = None
+
     data = {
         "eleicao" : eleicao_id,
         "nome" : nome,
@@ -331,5 +350,4 @@ def removerCandidato(user):
     }
 
     return CandidatoController.remover(data)
-
 

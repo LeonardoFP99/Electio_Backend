@@ -47,6 +47,9 @@ def remover(data):
 
     eleicao = session.query(Eleicao).filter(Eleicao.id == data['eleicao']).first()
 
+    if not eleicao:
+        return jsonify({'msg' : 'Eleição não encontrada.'}), 404
+
     if eleicao.agendada == True:
         return jsonify({'msg' : 'Esta eleição já foi agendada.'}), 405
 
@@ -78,6 +81,6 @@ def retornarPorEleicao(id):
         return jsonify({'msg' : 'Não foram encontrados candidatos nesta eleição.'}), 404
 
     candidatos_schema = CandidatoSchema(many = True)
-    output = candidatos_schema.dump(candidatos).data
+    output = candidatos_schema.dump(candidatos)
 
     return jsonify({'candidatos' : output}), 200

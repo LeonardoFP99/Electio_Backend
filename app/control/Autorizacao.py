@@ -23,7 +23,13 @@ def admin_req(f):
         if not token:
             return jsonify({'msg' : 'Você não possui o token de acesso.'}), 401
 
-        data = jwt.decode(token, app.config['SECRET_KEY'])
+        try:
+
+            data = jwt.decode(token, app.config['SECRET_KEY'])
+
+        except (jwt.DecodeError, jwt.ExpiredSignatureError):
+
+            return jsonify({'msg' : 'Token de acesso inválido.'}), 401
 
         if not data['type'] == 'administrador':
             return jsonify({'msg' : 'Você não tem permissões de administrador.'}), 401
@@ -51,7 +57,13 @@ def eleitor_req(f):
         if not token:
             return jsonify({'msg' : 'Você não possui o token de acesso.'}), 401
 
-        data = jwt.decode(token, app.config['SECRET_KEY'])
+        try:
+
+            data = jwt.decode(token, app.config['SECRET_KEY'])
+
+        except (jwt.DecodeError, jwt.ExpiredSignatureError):
+
+            return jsonify({'msg' : 'Token de acesso inválido.'}), 401
 
         if not data['type'] == 'eleitor':
             return jsonify({'msg' : 'Você não tem permissões de eleitor.'}), 401

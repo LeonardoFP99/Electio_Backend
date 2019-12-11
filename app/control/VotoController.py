@@ -27,8 +27,13 @@ def registro(data):
     if not eleicao:
         return jsonify({'msg' : 'Eleição não encontrada.'}), 404
 
-    if eleicao.agendada == False or eleicao.inicio > datetime.datetime.utcnow() or eleicao.fim < datetime.datetime.utcnow():
+    if eleicao.agendada == False or eleicao.inicio > datetime.datetime.now() or eleicao.fim < datetime.datetime.now():
         return jsonify({'msg' : 'Esta eleição não pode receber votos.'}), 403
+
+    voto = session.query(Voto).filter(Voto.eleicao_id == data['eleicao'], Voto.eleitor_id == data['eleitor']).first()
+
+    if voto:
+        return jsonify({'msg' : 'Esta eleição já foi votada por este eleitor.'}), 403
 
 
     novo_voto = Voto(eleitor_id = data['eleitor'], candidato_id = data['candidato'], eleicao_id = data['eleicao'])
@@ -47,25 +52,6 @@ def registro(data):
 
 
 
-def retornarPorEleitor(id):
-
-    eleitor = session.query(Eleitor).filter(Eleitor.id == id).first()
-
-    if not eleitor:
-        return jsonify({'msg' : 'Eleitor não encontrado.'}), 404
-
-    votos = session.query(Voto).filter(Voto.eleitor_id == id).all()
-
-    if not votos:
-        return jsonify({'msg' : 'Não foram encontrados votos deste eleitor.'}), 404
-
-    votos_schema = VotoSchema(many = True)
-    output = votos_schema.dump(votos).data
-
-    return jsonify({'votos' : output})
-
-
-
 def retornarPorCandidato(id):
 
     candidato = session.query(Candidato).filter(Candidato.id == id).first()
@@ -79,7 +65,7 @@ def retornarPorCandidato(id):
         return jsonify({'msg' : 'Não foram encontrados votos deste candidato.'}), 404
 
     votos_schema = VotoSchema(many = True)
-    output = votos_schema.dump(votos).data
+    output = votos_schema.dump(votos)
 
     return jsonify({'votos' : output})
 
@@ -99,7 +85,7 @@ def retornarPorEleicao(id):
         return jsonify({'msg' : 'Não foram encontrados votos desta eleição.'}), 404
 
     votos_schema = VotoSchema(many = True)
-    output = votos_schema.dump(votos).data
+    output = votos_schema.dump(votos)
 
     return jsonify({'votos' : output})
 
